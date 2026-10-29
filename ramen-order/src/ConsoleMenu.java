@@ -95,7 +95,7 @@ public class ConsoleMenu {
         System.out.println("1. Small");
         System.out.println("2. Medium (+1.00)");
         System.out.println("3. Large (+2.00)");
-        System.out.print("Your choice: ");
+        notifier.notifyBowlChanged(order);
         int choice = readNumber();
         Size size = null;
         if (choice == 1) {
