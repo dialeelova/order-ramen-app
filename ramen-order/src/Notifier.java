@@ -1,13 +1,12 @@
 public class Notifier {
     public void notifyBowlChanged(Order order) {
-        System.out.println("Updated: " + order.getDescription());
-        System.out.println("Price: " + round(order.getTotalCost()));
+        Notification notification = new UpdateNotification(order.getDescription(), round(order.getTotalCost()));
+        notification.send();
     }
 
     public void notifyUndo(Order order) {
-        System.out.println("Last change was undone.");
-        System.out.println("Now: " + order.getDescription());
-        System.out.println("Price: " + round(order.getTotalCost()));
+        Notification notification = new UpdateNotification("Last change was undone - " + order.getDescription(), round(order.getTotalCost()));
+        notification.send();
     }
 
     public void notifyNothingToUndo() {
@@ -19,12 +18,13 @@ public class Notifier {
     }
 
     public void notifyOrderPlaced(Order order) {
-        System.out.println("Your order has been placed: " + order.getDescription());
-        System.out.println("Total paid: " + round(order.getTotalCost()));
+        Notification notification = new OrderNotification("Your order has been placed: " + order.getDescription(), round(order.getTotalCost()));
+        notification.send();
     }
 
     public void notifyOrderCancelled() {
-        System.out.println("Your order has been cancelled.");
+        Notification notification = new OrderNotification("Your order has been cancelled.", 0);
+        notification.send();
     }
 
     private double round(double value) {
