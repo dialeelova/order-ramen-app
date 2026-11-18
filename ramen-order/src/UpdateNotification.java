@@ -1,5 +1,5 @@
 public class UpdateNotification extends Notification {
-    private double price;
+    private final double price;
 
     public UpdateNotification(String message, double price) {
         super(message);
@@ -12,7 +12,7 @@ public class UpdateNotification extends Notification {
 
     @Override
     public void send() {
-        System.out.println("Updated: " + getMessage());
-        System.out.println("Price: " + price);
+        System.out.println(getMessage());
+        System.out.println("Current price: " + PriceFormatter.format(price));
     }
 }

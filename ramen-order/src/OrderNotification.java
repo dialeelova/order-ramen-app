@@ -1,5 +1,5 @@
 public class OrderNotification extends Notification {
-    private double total;
+    private final double total;
 
     public OrderNotification(String message, double total) {
         super(message);
@@ -14,7 +14,7 @@ public class OrderNotification extends Notification {
     public void send() {
         System.out.println(getMessage());
         if (total > 0) {
-            System.out.println("Total: " + total);
+            System.out.println("Total: " + PriceFormatter.format(total));
         }
     }
 }

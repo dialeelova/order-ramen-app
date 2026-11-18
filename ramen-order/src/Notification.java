@@ -1,7 +1,10 @@
 public abstract class Notification {
-    private String message;
+    private final String message;
 
-    public Notification(String message) {
+    protected Notification(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            throw new IllegalArgumentException("Notification message cannot be empty");
+        }
         this.message = message;
     }
 
