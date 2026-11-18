@@ -2,17 +2,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandHistory {
-    private List<Command> commands;
+    private final List<Command> commands = new ArrayList<>();
 
-    public CommandHistory() {
-        commands = new ArrayList<>();
-    }
-
-    public void executeCommand(Command command) {
-        if (command != null) {
-            command.execute();
+    public boolean executeCommand(Command command) {
+        if (command == null) {
+            return false;
+        }
+        boolean applied = command.execute();
+        if (applied) {
             commands.add(command);
         }
+        return applied;
     }
 
     public boolean canUndo() {
