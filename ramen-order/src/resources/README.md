@@ -17,7 +17,7 @@ Ramen. A console application for ordering one bowl of ramen and customising it.
 ## Design patterns
 
 ### Creational: Factory (`RamenFactory`, `ToppingFactory`)
-The menu only knows the number the user typed. The factories turn that number into the right object (`CheeseRamen`, `EggTopping`, ...), so `ConsoleMenu` never calls the concrete constructors. Each factory keeps one list of options, so adding a new ramen or topping means adding one line to that list. The menus are also printed from the same list, so they always match what can be created.
+The menu only knows the number the user typed. The factories turn that number into the right object (`CheeseRamen`, `EggTopping`, ...), so `ConsoleMenu` never calls the ramen and topping constructors directly. Each factory keeps one list of options, so adding a new ramen or topping means adding one line to that list. The menus are also printed from the same list, so they always match what can be created.
 
 ### Structural: Decorator (`RamenItem`, `ToppingDecorator`)
 Every topping wraps a `RamenItem` and adds its own name and price to the item it wraps. Toppings can be combined in any order and any number without creating classes such as "ChickenRamenWithEggAndNori". The price and description of the bowl are worked out by passing the call down the chain. `Order` only works with the `RamenItem` interface, so it does not care whether the bowl is a plain ramen or has five toppings.
