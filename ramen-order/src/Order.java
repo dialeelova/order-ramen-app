@@ -1,14 +1,21 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
+    private final Ramen baseRamen;
     private RamenItem bowl;
     private Size size;
-    private List<String> toppingNames;
 
-    public Order(RamenItem bowl) {
-        setBowl(bowl);
-        this.toppingNames = new ArrayList<>();
+    public Order(Ramen baseRamen) {
+        if (baseRamen == null) {
+            throw new IllegalArgumentException("Ramen cannot be empty");
+        }
+        this.baseRamen = baseRamen;
+        this.bowl = baseRamen;
+        this.size = Size.SMALL;
+    }
+
+    public Ramen getBaseRamen() {
+        return baseRamen;
     }
 
     public RamenItem getBowl() {
@@ -16,11 +23,10 @@ public class Order {
     }
 
     public void setBowl(RamenItem bowl) {
-        if (bowl != null) {
-            this.bowl = bowl;
-        } else {
-            System.out.println("Bowl cannot be empty");
+        if (bowl == null) {
+            throw new IllegalArgumentException("Bowl cannot be empty");
         }
+        this.bowl = bowl;
     }
 
     public Size getSize() {
@@ -28,51 +34,46 @@ public class Order {
     }
 
     public void setSize(Size size) {
+        if (size == null) {
+            throw new IllegalArgumentException("Size cannot be empty");
+        }
         this.size = size;
     }
 
-    public List<String> getToppingNames() {
-        return new ArrayList<>(toppingNames);
+    public List<ToppingDecorator> getToppings() {
+        return bowl.getToppings();
     }
 
-    public boolean canAddTopping(String toppingName) {
-        if (toppingName == null || toppingName.trim().isEmpty()) {
-            return false;
+    public boolean isAlreadyAdded(ToppingDecorator topping) {
+        for (ToppingDecorator added : getToppings()) {
+            if (added.getToppingName().equals(topping.getToppingName())) {
+                return true;
+            }
         }
-        if (toppingName.equals("Mild sauce") && toppingNames.contains("Spicy sauce")) {
-            return false;
-        }
-        if (toppingName.equals("Spicy sauce") && toppingNames.contains("Mild sauce")) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
-    public void addToppingName(String toppingName) {
-        if (canAddTopping(toppingName)) {
-            toppingNames.add(toppingName);
+    public boolean hasSauceConflict(ToppingDecorator topping) {
+        if (!topping.isSauce()) {
+            return false;
         }
+        for (ToppingDecorator added : getToppings()) {
+            if (added.isSauce()) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void removeLastToppingName() {
-        if (!toppingNames.isEmpty()) {
-            toppingNames.remove(toppingNames.size() - 1);
-        }
+    public boolean canAddTopping(ToppingDecorator topping) {
+        return topping != null && !isAlreadyAdded(topping) && !hasSauceConflict(topping);
     }
 
     public double getTotalCost() {
-        double total = bowl.getCost();
-        if (size != null) {
-            total += size.getExtraPrice();
-        }
-        return total;
+        return bowl.getCost() + size.getExtraPrice();
     }
 
     public String getDescription() {
-        String text = bowl.getDescription();
-        if (size != null) {
-            text += ", size " + size.getName();
-        }
-        return text;
+        return bowl.getDescription() + " (" + size.getName() + ")";
     }
 }

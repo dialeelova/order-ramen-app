@@ -1,34 +1,22 @@
-public class Size {
-    private String name;
-    private double extraPrice;
+public enum Size {
+    SMALL("Small", 0.00),
+    MEDIUM("Medium", 1.00),
+    LARGE("Large", 2.00);
 
-    public Size(String name, double extraPrice) {
-        setName(name);
-        setExtraPrice(extraPrice);
+    private final String name;
+    private final double extraPrice;
+
+    Size(String name, double extraPrice) {
+        this.name = name;
+        this.extraPrice = extraPrice;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        if (name != null && !name.trim().isEmpty()) {
-            this.name = name.trim();
-        } else {
-            System.out.println("Size name cannot be empty");
-        }
-    }
-
     public double getExtraPrice() {
         return extraPrice;
-    }
-
-    public void setExtraPrice(double extraPrice) {
-        if (extraPrice >= 0) {
-            this.extraPrice = extraPrice;
-        } else {
-            System.out.println("Extra price cannot be negative");
-        }
     }
 
     @Override
