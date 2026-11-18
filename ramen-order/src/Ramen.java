@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Ramen implements RamenItem {
     private String name;
     private double basePrice;
 
-    public Ramen(String name, double basePrice) {
+    protected Ramen(String name, double basePrice) {
         setName(name);
         setBasePrice(basePrice);
     }
@@ -11,24 +14,27 @@ public abstract class Ramen implements RamenItem {
         return name;
     }
 
-    public void setName(String name) {
-        if (name != null && !name.trim().isEmpty()) {
-            this.name = name.trim();
-        } else {
-            System.out.println("Ramen name cannot be empty");
+    public final void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Ramen name cannot be empty");
         }
+        this.name = name.trim();
     }
 
     public double getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(double basePrice) {
-        if (basePrice > 0) {
-            this.basePrice = basePrice;
-        } else {
-            System.out.println("Price must be positive");
+    public final void setBasePrice(double basePrice) {
+        if (basePrice <= 0) {
+            throw new IllegalArgumentException("Ramen price must be positive");
         }
+        this.basePrice = basePrice;
+    }
+
+    @Override
+    public String getDescription() {
+        return name;
     }
 
     @Override
@@ -37,5 +43,7 @@ public abstract class Ramen implements RamenItem {
     }
 
     @Override
-    public abstract String getDescription();
+    public List<ToppingDecorator> getToppings() {
+        return new ArrayList<>();
+    }
 }
