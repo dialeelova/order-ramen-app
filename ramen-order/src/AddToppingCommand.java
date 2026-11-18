@@ -1,56 +1,30 @@
 public class AddToppingCommand implements Command {
-    private Order order;
+    private final Order order;
+    private final ToppingDecorator topping;
     private RamenItem previousBowl;
-    private ToppingDecorator topping;
 
-    public AddToppingCommand(Order order, int toppingChoice) {
+    public AddToppingCommand(Order order, ToppingDecorator topping) {
+        if (order == null || topping == null) {
+            throw new IllegalArgumentException("Order and topping are required");
+        }
         this.order = order;
-        this.previousBowl = order.getBowl();
-        this.topping = createTopping(toppingChoice);
-    }
-
-    private ToppingDecorator createTopping(int toppingChoice) {
-        if (toppingChoice == 1) {
-            return new EggTopping(previousBowl);
-        } else if (toppingChoice == 2) {
-            return new ExtraCheeseTopping(previousBowl);
-        } else if (toppingChoice == 3) {
-            return new SausageTopping(previousBowl);
-        } else if (toppingChoice == 4) {
-            return new NoriTopping(previousBowl);
-        } else if (toppingChoice == 5) {
-            return new MildSauceTopping(previousBowl);
-        } else if (toppingChoice == 6) {
-            return new SpicySauceTopping(previousBowl);
-        }
-        return null;
-    }
-
-    public String getToppingName() {
-        if (topping == null) {
-            return "Unknown topping";
-        }
-        return topping.getToppingName();
-    }
-
-    public boolean isAllowed() {
-        if (topping == null) {
-            return false;
-        }
-        return order.canAddTopping(topping.getToppingName());
+        this.topping = topping;
     }
 
     @Override
-    public void execute() {
-        if (isAllowed()) {
-            order.setBowl(topping);
-            order.addToppingName(topping.getToppingName());
+    public boolean execute() {
+        if (!order.canAddTopping(topping)) {
+            return false;
         }
+        previousBowl = order.getBowl();
+        order.setBowl(topping);
+        return true;
     }
 
     @Override
     public void undo() {
-        order.setBowl(previousBowl);
-        order.removeLastToppingName();
+        if (previousBowl != null) {
+            order.setBowl(previousBowl);
+        }
     }
 }
